@@ -38,9 +38,24 @@ which will serve some dummy data to the default ports of ClearVolume
 	
 	d = pyclearvolume.DataServer()
 
-	d.bind()		
-
 	d.start()
 
-	d.sendData(data, time = 0, channel = 0)
+	d.sendData(data)  #without metadata
+	
+	d.sendData(data, time = 0, channel = 1)  #with metadata
     
+
+The metadata fields currently supported by ClearVolume are
+
+	:::python
+	widthreal,
+	elementsize,
+	realunit,
+	heightreal,
+    index,
+	depthreal,
+	dim,
+	bytespervoxel,
+	time,
+	type,
+	channel

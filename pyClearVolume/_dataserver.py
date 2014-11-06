@@ -23,6 +23,8 @@ logger.setLevel(logging.INFO)
 
 ######
 
+__all__ = ["DataServer"]
+
 
 
 class DataServer:
@@ -34,14 +36,16 @@ class DataServer:
 
     _TIMEOUT = .001
 
-    def __init__(self, maxVolumeNumber = 20):
+    def __init__(self, address = _DEFAULT_ADDRESS,
+                 port = _DEFAULT_PORT,maxVolumeNumber = 20):
         self.sock = socket.socket()
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.dataQueue = Queue.Queue()
         self.maxVolumeNumber = max(1,maxVolumeNumber)
         self.dataThread = _DataServerThread(self.sock, self.dataQueue)
-
-    def bind(self, address = _DEFAULT_ADDRESS, port = _DEFAULT_PORT):
+        self._bind(address,port)
+        
+    def _bind(self, address = _DEFAULT_ADDRESS, port = _DEFAULT_PORT):
         logger.debug("binding with address %s at port %s "%(address,port))
         try:
             self.sock.bind((address,port))
