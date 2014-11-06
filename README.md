@@ -23,10 +23,11 @@ or classically
 > python setup.py install
 
 
-if everything works, you may test if everything is right by first starting the ClearVolume GUI and then run from the command line   
+to test if everything worked, you should first start ClearVolume and then run from the command line   
 
 > python -m pyclearvolume
 
+which will serve some dummy data to the default ports of ClearVolume
 
 
 ## Usage
