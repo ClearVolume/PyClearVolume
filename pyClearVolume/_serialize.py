@@ -45,8 +45,6 @@ def _serialize_data(data, header = DEFAULT_HEADER ):
 
     headerStr = str(dataHeader).replace("{","[").replace("}","]").replace("'",'').replace(" ",'')
 
-    print headerStr
-
     
     headerLength = len(headerStr)
 

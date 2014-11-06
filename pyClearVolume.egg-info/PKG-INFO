@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: pyClearVolume
+Version: 0.1
+Summary: python binding for the ClearVolume Renderer
+Home-page: http://mweigert@bitbucket.org/mweigert/pyClearVolume
+Author: Martin Weigert
+Author-email: mweigert@mpi-cbg.de
+License: MIT
+Description: UNKNOWN
+Platform: UNKNOWN

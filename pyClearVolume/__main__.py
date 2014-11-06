@@ -1,28 +1,32 @@
 
-
-
-
 import numpy as np
 import time
 
+import pyclearvolume
 
-d = DataServer(maxVolumeNumber = 20)
+print "creating the server"
+
+d = pyclearvolume.DataServer(maxVolumeNumber = 20)
 
 d.bind()
 
+print "starting the server"
+
 d.start()
 
-time.sleep(4)
-print "staaaaart"
+time.sleep(1)
 
-    
-for i in range(100):
-    data = np.zeros((128,)*3)
-    j = i%30
-    data[3*j:3*(j+1),:,:] = 100
+print "starting to serve data"
+
+Nsizes = np.linspace(128,512,4).astype(np.int)
+Niter = 50
 
 
-    print np.mean(data)
-    d.sendData(data.astype(np.uint8), time = i)
-    time.sleep(.1)
-        
+for Nsize in Nsizes:
+    data = np.zeros((Nsize,)*3)
+    print "sending data with size %s"%str(data.shape)
+    for i in range(Niter):
+        j = i%Nsize
+        data[j,:,:] = 100
+        d.sendData(data.astype(np.uint8), time = i)
+        time.sleep(.01)

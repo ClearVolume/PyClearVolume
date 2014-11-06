@@ -19,6 +19,8 @@ import logging
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
+
 ######
 
 
@@ -105,7 +107,7 @@ class _DataServerThread(threading.Thread):
         self.isRunning = False
 
     def send_data(self,conn,data, header = {}):
-        print "SEEEEND ", data.shape, header
+        # print "SEEEEND ", data.shape, header
         conn.send(_serialize_data(data, header))
         #_serialize_data
 
@@ -126,7 +128,7 @@ if __name__ == '__main__':
     time.sleep(4)
     print "staaaaart"
 
-    
+
     for i in range(100):
         data = np.zeros((128,)*3)
         j = i%30
