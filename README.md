@@ -27,7 +27,7 @@ to test if everything worked, you should first start ClearVolume and then run fr
 
 > python -m pyclearvolume
 
-which will serve some dummy data to the default ports of ClearVolume
+which will serve some dummy data to the default port ClearVolume is listening to.
 
 
 ## Usage
