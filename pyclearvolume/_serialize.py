@@ -8,7 +8,7 @@ email: mweigert@mpi-cbg.de
 import numpy as np
 
 
-DEFAULT_HEADER = {
+DEFAULT_METADATA = {
     "index":0,
     "time": 0,
 	"channel": 0,
@@ -24,26 +24,26 @@ DEFAULT_HEADER = {
 
 
 
-def _serialize_data(data, header = DEFAULT_HEADER ):
+def _serialize_data(data, meta = DEFAULT_METADATA ):
     """returns serialized version of data for clearvolume data viewer"""
 
     LenInt64 = len(np.int64(1).tostring())
 
     Ns = data.shape
 
-    dataHeader = DEFAULT_HEADER.copy()
+    metaData = DEFAULT_METADATA.copy()
     #prepare header....
     for attrName,N in zip(["widthvoxels","heightvoxels","depthvoxels"],Ns[::-1]):
-        dataHeader[attrName] = header.get(attrName,N)
+        metaData[attrName] = meta.get(attrName,N)
 
-    for key, val in header.iteritems():
-        if not dataHeader.has_key(key):
+    for key, val in meta.iteritems():
+        if not metaData.has_key(key):
             raise KeyError(" '%s' (= %s) as is an unknown property!"%(key, val))
         else:
-            dataHeader[key] = val
+            metaData[key] = val
 
 
-    headerStr = str(dataHeader).replace("{","[").replace("}","]").replace("'",'').replace(" ",'')
+    headerStr = str(metaData).replace("{","[").replace("}","]").replace("'",'').replace(" ",'')
 
     
     headerLength = len(headerStr)

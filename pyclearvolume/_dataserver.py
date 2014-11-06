@@ -29,6 +29,20 @@ __all__ = ["DataServer"]
 
 class DataServer:
     """
+    The main data serving object.
+
+    Basic usage:
+
+
+    d = DataServer()
+
+    d.start()
+
+    data = linspace(0,100,100**3).reshape((100,100,100))
+
+    d.sendData(data.astype(uint8))
+
+
     """
 
     _DEFAULT_ADDRESS = "localhost"
@@ -44,7 +58,7 @@ class DataServer:
         self.maxVolumeNumber = max(1,maxVolumeNumber)
         self.dataThread = _DataServerThread(self.sock, self.dataQueue)
         self._bind(address,port)
-        
+
     def _bind(self, address = _DEFAULT_ADDRESS, port = _DEFAULT_PORT):
         logger.debug("binding with address %s at port %s "%(address,port))
         try:
@@ -56,7 +70,7 @@ class DataServer:
 
     def sendData(self, data, **kwargs):
         logger.debug("sending data of shape %s"%str(data.shape))
-        logger.debug("header: %s"%kwargs)
+        logger.debug("meta: %s"%kwargs)
 
         if self.dataQueue.qsize()>=self.maxVolumeNumber:
             self.dataQueue.get(block=True,timeout = self._TIMEOUT)
@@ -97,7 +111,7 @@ class _DataServerThread(threading.Thread):
             logger.debug("now serving the data...")
             while True:
                 try:
-                    data, header = self.dataQueue.get(block = True, timeout = self._TIMEOUT)
+                    data, meta = self.dataQueue.get(block = True, timeout = self._TIMEOUT)
                     self.send_data(conn,data, header)
                 except Queue.Empty:
                     # logger.debug("no data :(")
@@ -110,9 +124,9 @@ class _DataServerThread(threading.Thread):
         # logger.debug("stopping thread")
         self.isRunning = False
 
-    def send_data(self,conn,data, header = {}):
-        # print "SEEEEND ", data.shape, header
-        conn.send(_serialize_data(data, header))
+    def send_data(self,conn,data, meta = {}):
+        # print "SEEEEND ", data.shape, meta
+        conn.send(_serialize_data(data, meta))
         #_serialize_data
 
 

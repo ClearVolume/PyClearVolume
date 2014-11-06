@@ -8,8 +8,6 @@ print "creating the server"
 
 d = pyclearvolume.DataServer(maxVolumeNumber = 20)
 
-d.bind()
-
 print "starting the server"
 
 d.start()

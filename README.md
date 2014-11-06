@@ -16,7 +16,7 @@ Either via pip
 
 or classically
 
-> git clone git+http://mweigert@bitbucket.org/mweigert/pyclearvolume
+> git clone http://mweigert@bitbucket.org/mweigert/pyclearvolume
 
 > cd pyclearvolume
 
