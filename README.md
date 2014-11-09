@@ -18,7 +18,7 @@ or classically
 
 > git clone http://mweigert@bitbucket.org/mweigert/pyclearvolume
 
-> cd pyclearvdatolume
+> cd pyclearvolume
 
 > python setup.py install
 
