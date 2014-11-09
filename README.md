@@ -35,28 +35,20 @@ which will serve some dummy data to the default port (9140 on localhost) ClearVo
 To create a instance of the data server just do 
 
     :::python 
-	import pyclearvolume
-	
-	d = pyclearvolume.DataServer()
-
-the optional parameters of the constructor can be set as follows:
-
-	:::python
-    
 	d = pyclearvolume.DataServer(
 	    address = "localhost",
 		port = 9140,
 		maxVolumeNumber = 20,
         dropVolumeOnFull = True)
 
-to start serving
-
+then start the server
 
 	:::python
 	d.start()
 
-	d.sendData(data)  #without metadata
-	
+and send data
+
+	:::python
 	d.sendData(data, time = 0, channel = 1, color ="1.0 0.4 0.2 1.0")  #with metadata
 
 
