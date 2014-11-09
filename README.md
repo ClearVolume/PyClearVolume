@@ -18,7 +18,7 @@ or classically
 
 > git clone http://mweigert@bitbucket.org/mweigert/pyclearvolume
 
-> cd pyclearvolume
+> cd pyclearvdatolume
 
 > python setup.py install
 
@@ -64,7 +64,7 @@ and send data
 
 	print "creating the server"
 
-	d = pyclearvolume.DataServer(maxVolumeNumber=2)
+	d = pyclearvolume.DataServer(maxVolumeNumber=20)
 
 	print "starting the server"
 
