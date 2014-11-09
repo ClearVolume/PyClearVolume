@@ -6,7 +6,7 @@ import pyclearvolume
 
 print "creating the server"
 
-d = pyclearvolume.DataServer(maxVolumeNumber = 20)
+d = pyclearvolume.DataServer(maxVolumeNumber=2)
 
 print "starting the server"
 
@@ -16,15 +16,21 @@ time.sleep(1)
 
 print "starting to serve data"
 
-Nsizes = np.linspace(128,512,4).astype(np.int)
-Niter = 50
+N = 128
+data = np.linspace(0,65000,N**3).reshape((N,)*3).astype(np.uint16)
 
+t = 0
+while True:
+    args = {}
+    args["color"] = "%s %s %s 1."%tuple([str(c) for c in np.random.uniform(0,1,3)])
+    args["voxelwidth"] = np.random.uniform(.2,1.6)
+    args["voxelheight"] = np.random.uniform(.2,1.6)
+    args["voxeldepth"] = np.random.uniform(.2,1.6)
+    args["time"] = t
 
-for Nsize in Nsizes:
-    data = np.zeros((Nsize,)*3)
-    print "sending data with size %s"%str(data.shape)
-    for i in range(Niter):
-        j = i%Nsize
-        data[j,:,:] = 100
-        d.sendData(data.astype(np.uint8), time = i)
-        time.sleep(.01)
+    print "sending..."
+    print args
+    d.sendData(data,**args)
+    # d.sendData(data)
+    time.sleep(2)
+    t += 1

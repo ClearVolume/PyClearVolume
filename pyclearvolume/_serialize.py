@@ -12,13 +12,16 @@ DEFAULT_METADATA = {
     "index":0,
     "time": 0,
 	"channel": 0,
+    "channelname": "python source",
+    "color": "1. 1. 1. 1.",
+    "viewmatrix": "1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.",
 	"dim": 3,
 	"type": "Byte",
 	"bytespervoxel":1,
 	"elementsize": 1,
-	"widthreal": 1,
-	"heightreal": 1,
-	"depthreal": 1,
+	"voxelwidth": 1,
+	"voxelheight": 1,
+	"voxeldepth": 1,
 	"realunit":1
     }
 
@@ -33,7 +36,7 @@ def _serialize_data(data, meta = DEFAULT_METADATA ):
 
     metaData = DEFAULT_METADATA.copy()
     #prepare header....
-    for attrName,N in zip(["widthvoxels","heightvoxels","depthvoxels"],Ns[::-1]):
+    for attrName,N in zip(["width","height","depth"],Ns[::-1]):
         metaData[attrName] = meta.get(attrName,N)
 
     for key, val in meta.iteritems():
@@ -43,9 +46,13 @@ def _serialize_data(data, meta = DEFAULT_METADATA ):
             metaData[key] = val
 
 
-    headerStr = str(metaData).replace("{","[").replace("}","]").replace("'",'').replace(" ",'')
-
+    keyValPairs = [str(key)+":"+str(val) for key, val in metaData.iteritems()]
+    headerStr = ",".join(keyValPairs)
+    headerStr = "["+headerStr+"]"
     
+    # headerStr = str(metaData).replace("{","[").replace("}","]").replace("'",'')#.replace(" ",'')
+
+
     headerLength = len(headerStr)
 
     dataStr = data.tostring()
@@ -60,9 +67,13 @@ def _serialize_data(data, meta = DEFAULT_METADATA ):
 if __name__ == '__main__':
 
 
-    Ns = [11,12,13]
+    Ns = [1,2,3]
 
     d = (123*np.linspace(0,200,np.prod(Ns))).reshape(Ns).astype(np.uint8)
 
 
-    dStr = _serialize_data(d,{"widthreal": 5.})
+    # dStr = _serialize_data(d,{"width": 5.,"color":"1. .5 .2 1."})
+
+    dStr = _serialize_data(d,{"width": "5","color":"1. .5 .2 1."})
+
+    # print dStr
