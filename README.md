@@ -12,7 +12,7 @@ A working installation of [ClearVolume](https://bitbucket.org/royerloic/clearvol
 
 Either via pip
 
-> pip install --user git+http://mweigert@bitbucket.org/mweigert/pyclearvolume
+> pip install git+http://mweigert@bitbucket.org/mweigert/pyclearvolume
 
 or classically
 
