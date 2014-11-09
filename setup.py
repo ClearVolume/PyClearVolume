@@ -10,6 +10,6 @@ setup(name='pyClearVolume',
     author_email='mweigert@mpi-cbg.de',
     license='MIT',
     packages=['pyclearvolume'],
-    # install_requires=[],
+    install_requires=["numpy"],
     # package_data={"":['']},
 )
