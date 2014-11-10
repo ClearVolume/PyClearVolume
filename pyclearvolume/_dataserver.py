@@ -100,7 +100,6 @@ class DataServer:
 
         logger.debug("got data of shape %s"%str(data.shape))
         logger.debug("meta: %s"%kwargs)
-        print self.dataQueue.qsize()
 
         if self.dataQueue.full():
             if self.dropVolumeOnFull:

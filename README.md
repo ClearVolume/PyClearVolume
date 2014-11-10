@@ -46,10 +46,10 @@ then start the server
 	:::python
 	d.start()
 
-and send data
+and send some data
 
 	:::python
-	d.sendData(data, time = 0, channel = 1, color ="1.0 0.4 0.2 1.0")  #with metadata
+	d.sendData(data, time = 0, channel = 1, color ="1.0 0.4 0.2 1.0") 
 
 
 
