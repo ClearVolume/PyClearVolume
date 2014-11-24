@@ -1,10 +1,10 @@
 # pyclearvolume
 
-python bindings to the [ClearVolume project](https://bitbucket.org/royerloic/clearvolume) that enables serving numpy data from within python to the renderer.  
+python bindings to the [ClearVolume project](https://bitbucket.org/clearvolume/clearvolume) that enables serving numpy data from within python to the renderer.  
 
 ## Prerequisites
 
-A working installation of [ClearVolume](https://bitbucket.org/royerloic/clearvolume).
+A working installation of [ClearVolume](https://bitbucket.org/clearvolume/clearvolume).
 
 
 ## Installing
