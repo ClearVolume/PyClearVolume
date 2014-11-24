@@ -26,7 +26,7 @@ while True:
     args["voxelwidth"] = np.random.uniform(.2,1.6)
     args["voxelheight"] = np.random.uniform(.2,1.6)
     args["voxeldepth"] = np.random.uniform(.2,1.6)
-    args["time"] = t
+    args["index"] = t
 
     print "sending..."
     print args
