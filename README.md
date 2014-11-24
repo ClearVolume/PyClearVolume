@@ -12,11 +12,11 @@ A working installation of [ClearVolume](https://bitbucket.org/clearvolume/clearv
 
 Either via pip
 
-> pip install git+http://bitbucket.org/mweigert/pyclearvolume
+> pip install git+http://bitbucket.org/clearvolume/pyclearvolume
 
 or classically
 
-> git clone http://bitbucket.org/mweigert/pyclearvolume
+> git clone http://bitbucket.org/clearvolume/pyclearvolume
 
 > cd pyclearvolume
 
