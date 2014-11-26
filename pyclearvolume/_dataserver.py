@@ -45,7 +45,7 @@ class DataServer:
     
     """
 
-    _DEFAULT_ADDRESS = "localhost"
+    _DEFAULT_ADDRESS = ""
     _DEFAULT_PORT = 9140
 
     _TIMEOUT = .001
