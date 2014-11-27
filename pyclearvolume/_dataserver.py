@@ -42,7 +42,7 @@ class DataServer:
 
     d.sendData(data.astype(uint16))
 
-    
+
     """
 
     _DEFAULT_ADDRESS = ""
@@ -95,7 +95,7 @@ class DataServer:
           "voxelheight": 1,
           "voxeldepth": 1,
           "realunit":1
-  
+
         """
 
         logger.debug("got data of shape %s"%str(data.shape))
@@ -110,6 +110,8 @@ class DataServer:
 
         self.dataQueue.put((data, kwargs))
 
+    def isConnected(self):
+        return self.dataThread.isconnected
 
     def start(self):
         logger.debug("starting server")
@@ -132,15 +134,18 @@ class _DataServerThread(threading.Thread):
         self.sock = sock
         self.dataQueue  = dataQueue
         self.daemon = True
+        self.isconnected = False
+
 
 
     def run(self):
         self.isRunning = True
         while self.isRunning:
             logger.debug("waiting for connection...")
-
+            self.isconnected = False
             conn, addr = self.sock.accept()
             logger.debug("...connected!")
+            self.isconnected = True
 
             logger.debug("now serving the data...")
             while True:
