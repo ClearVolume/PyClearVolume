@@ -110,8 +110,20 @@ class DataServer:
 
         self.dataQueue.put((data, kwargs))
 
-    def isConnected(self):
+    def is_connected(self):
         return self.dataThread.isconnected
+
+    def client_address(self):
+        print self.dataThread.clientAddress
+        if self.dataThread.clientAddress:
+            try:
+                clientIP = self.dataThread.clientAddress
+                clientName = socket.gethostbyaddr(clientIP)[0]
+                return clientIP, clientName
+            except Exception as e:
+                print e
+        return None, None
+
 
     def start(self):
         logger.debug("starting server")
@@ -134,7 +146,8 @@ class _DataServerThread(threading.Thread):
         self.sock = sock
         self.dataQueue  = dataQueue
         self.daemon = True
-        self.isconnected = False
+        self.isConnected = False
+        self.clientAddress = None
 
 
 
@@ -144,6 +157,7 @@ class _DataServerThread(threading.Thread):
             logger.debug("waiting for connection...")
             self.isconnected = False
             conn, addr = self.sock.accept()
+            self.clientAddress = addr[0]
             logger.debug("...connected!")
             self.isconnected = True
 
