@@ -114,7 +114,6 @@ class DataServer:
         return self.dataThread.isconnected
 
     def client_address(self):
-        print self.dataThread.clientAddress
         if self.dataThread.clientAddress:
             try:
                 clientIP = self.dataThread.clientAddress
