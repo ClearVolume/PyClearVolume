@@ -57,7 +57,8 @@ class DataServer:
                  port = _DEFAULT_PORT,
                  maxVolumeNumber = 20,
                  dropVolumeOnFull = True):
-
+        print "creating a server at address '%s' and port '%s'"%(address,port)
+        
         self.sock = socket.socket()
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.dataQueue = Queue.Queue(maxsize = max(1,maxVolumeNumber))

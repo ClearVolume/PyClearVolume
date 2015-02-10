@@ -8,8 +8,6 @@ print "creating the server"
 
 d = pyclearvolume.DataServer(maxVolumeNumber=2)
 
-print "starting the server"
-
 d.start()
 
 time.sleep(1)
