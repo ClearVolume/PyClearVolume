@@ -68,36 +68,36 @@ class ImageFileReader(object):
         return cls.load_func_for(fName)(fName)
 
     @classmethod
-    def _list_supported_files_with_timestamp(cls,dirName, wildcard = "*"):
-        files = [(f, os.path.getsize(f))
-                 for f in glob.glob(os.path.join(dirName,wildcard))
+    def _list_supported_files(cls,dirName, wildcard = "*", func = None):
+        """ list all supported files in directory dirName
+        
+        func can be a function of the filename, in which case the result is
+        the list (filename, func(filename))
+        """
+        if hasattr(func, '__call__'):
+            return [(f, func(f))
+                    for f in glob.glob(os.path.join(dirName,wildcard))
+                 if cls.is_supported(f)]
+        else:
+            return [f for f in glob.glob(os.path.join(dirName,wildcard))
                  if cls.is_supported(f)]
 
+            
 
 class ImageFolderReader(object):
-    def __init__(self,dirName = None, wildcard = "*"):
-        if dirName is None:
-            self.dirName = None
-        else:
-            self.load_dir(dirName, wildcard)
+    def __init__(self,dirName = None, wildcard = "*", func = None):
+        self.dirName = dirName
+        self.wildcard = wildcard
+        self.func= func    
 
-    def load_dir(self,dirName, wildcard):
-        if os.path.isdir(dirName):
-            self.dirName = dirName
-            self.wildcard = wildcard
-            self._update_files()
-        else:
-            raise IOError("Directory not found: %s"%dirName)
-
-    def _update_files(self):
-        self.files = [fName for fName in
-                      glob.glob(os.path.join(self.dirName,self.wildcard))
-                      if ImageFileReader.is_supported(fName)]
-        
-        return self.files
+    def list_files(self):
+        return ImageFileReader._list_supported_files(
+            self.dirName, self.wildcard, self.func)
 
     def __iter__(self):
-        for fName in self.files:
+        for fName in self.list_files():
+            if isinstance(fName,(list,tuple)):
+                fName = fName[0]
             data, meta = ImageFileReader.load_file(fName)
             yield data, meta
 
@@ -109,6 +109,6 @@ if __name__ == "__main__":
     
     a = ImageFolderReader("/Users/mweigert/Tmp/CVTmp/")
 
-
-    for fName, (data, meta) in zip(a.files, a):
-        print fName, data.shape
+    print a.list_files()
+    for data, meta in a:
+        print data.shape,meta

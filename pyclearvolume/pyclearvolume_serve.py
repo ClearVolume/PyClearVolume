@@ -32,13 +32,13 @@ def _prepare_data(data):
     
 
 
-def _watch_folder(dirName, addr, port, **kwargs):
+def _watch_folder(dirName, addr, port, dtime,**kwargs):
     d = pyclearvolume.DataServer(maxVolumeNumber=20)
 
     d.start()
 
     try:
-        watchThread = WatchThread(dirName)
+        watchThread = WatchThread(dirName, deltaTime = dtime)
     except Exception as e:
         sys.exit(str(e))
         
@@ -46,7 +46,6 @@ def _watch_folder(dirName, addr, port, **kwargs):
 
     t = 0
     while True:
-        print watchThread.empty()
         if not watchThread.empty():
             print "connected to %s %s"%(d.client_address())
             try:
@@ -55,6 +54,7 @@ def _watch_folder(dirName, addr, port, **kwargs):
                 data = _prepare_data(data)
                 args = {}
                 args["index"] = t
+                args.update(kwargs)
                 print "sending data of shape %s"%(data.shape,)
                 d.sendData(data,**args)
                 d.serveUntilEmpty()
@@ -62,7 +62,7 @@ def _watch_folder(dirName, addr, port, **kwargs):
             except  Exception as e:
                 print e
 
-        time.sleep(2.)
+        time.sleep(1.)
 
     d.stop()
 
@@ -84,6 +84,8 @@ def _send_files(fNames, addr, port, **kwargs):
 
             args = {}
             args["index"] = t
+            args.update(kwargs)
+
             print "sending data of shape %s"%(data.shape,)
             d.sendData(data,**args)
             d.serveUntilEmpty()
@@ -106,13 +108,13 @@ def _iter_file_folder_list(fNames):
             yield fName
             
                     
-        
+                
 
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter,
         description="""
-        reads  3d image files and sends them to the clearvolume client
+        serves 3d image files to the clearvolume client
         
         example usage:
 
@@ -129,9 +131,26 @@ if __name__ == "__main__":
     parser.add_argument("-w","--watch",dest="watch",
                         help = """watch folder""",
                         action="store_true")
+
+    parser.add_argument("-t","--time",dest="dtime",
+                        help = """time in secs in watch mode to
+                        wait for file not having changed""",
+                        type=float,default = 1., required = False)
+
+    parser.add_argument("-u","--units",dest="units",
+                        help = """relative units of voxels e.g. -u 1. 1. 2.""",
+                        type=float,nargs= 3 ,default = [1.,1.,1.], required=False)
     
+    parser.add_argument("-c","--color",dest="color",
+                        help = """color in 0..1""",
+                        type=float,nargs= 3 ,default = [1.,1.,1.], required=False)
+  
     parser.add_argument("files", help="image files or folder to send/watch", nargs="+") 
-    
+
+
+
+
+
     if len(sys.argv)==1:
         parser.print_help()
         sys.exit()
@@ -141,16 +160,24 @@ if __name__ == "__main__":
     for k,v in vars(args).iteritems():
         print k,v
 
+    kwargs = dict()
+
+    kwargs["voxelwidth"] = args.units[0]
+    kwargs["voxelheight"] = args.units[1]
+    kwargs["voxeldepth"] = args.units[2]
+    kwargs["color"] = "%s %s %s 1."%tuple(args.color)
+
+        
     if args.watch:
         dirName = args.files[0]
         if not os.path.isdir(dirName):
             raise ValueError("not a valid directory: %s"%dirName)
         else:
-            _watch_folder(dirName,args.address,args.port)
+            _watch_folder(dirName,args.address,args.port,args.dtime,**kwargs)
 
     else:
         fNames = [f for f in _iter_file_folder_list(args.files)]
         print fNames
-        _send_files(fNames,args.address,args.port)
+        _send_files(fNames,args.address,args.port,**kwargs)
 
     

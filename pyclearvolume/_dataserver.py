@@ -179,6 +179,7 @@ class _DataServerThread(threading.Thread):
                     data, meta = self.dataQueue.get(block = True, timeout = self._TIMEOUT)
                     logger.debug("[thread] got data in thread...")
                     self.send_data(conn,data, meta)
+                    self.dataQueue.task_done()
                 except Queue.Empty:
                     logger.debug("[thread] Queue empty")
                     self.isempty = True
