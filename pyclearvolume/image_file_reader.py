@@ -21,8 +21,8 @@ import glob
 import warnings
 warnings.filterwarnings("ignore")
 
-import czifile
-import tifffile
+from pyclearvolume import czifile
+from pyclearvolume import tifffile
 
 def _load_tif_file(fName):
     with tifffile.TiffFile(fName) as imgFile:
@@ -34,7 +34,6 @@ def _load_czi_file(fName):
     with czifile.CziFile(fName) as imgFile:
         data = imgFile.asarray()
         meta = None
-        print data.shape
     return data ,meta
 
 class ImageFileReader(object):
@@ -63,11 +62,16 @@ class ImageFileReader(object):
     @classmethod
     def load_file(cls,fName):
         if not cls.is_supported(fName):
-            raise ValueError("Image format %s not in supported formats (%s)!"
-                             %(ext,cls._supported.keys()))
+            raise ValueError("Image format of  %s not in supported formats (%s)!"
+                             %(fName,cls._supported.keys()))
 
         return cls.load_func_for(fName)(fName)
 
+    @classmethod
+    def _list_supported_files_with_timestamp(cls,dirName, wildcard = "*"):
+        files = [(f, os.path.getsize(f))
+                 for f in glob.glob(os.path.join(dirName,wildcard))
+                 if cls.is_supported(f)]
 
 
 class ImageFolderReader(object):
@@ -95,18 +99,16 @@ class ImageFolderReader(object):
     def __iter__(self):
         for fName in self.files:
             data, meta = ImageFileReader.load_file(fName)
-            yield data
+            yield data, meta
 
 
-
+            
 if __name__ == "__main__":
 
     # fName = "data/retina.czi"
-    fName = "data/blob32.tif"
-    img = ImageFileReader(fName)
     
-    a = ImageFolderReader("data")
+    a = ImageFolderReader("/Users/mweigert/Tmp/CVTmp/")
 
 
-    for data in ImageFolderReader("data"):
-        print data.shape
+    for fName, (data, meta) in zip(a.files, a):
+        print fName, data.shape

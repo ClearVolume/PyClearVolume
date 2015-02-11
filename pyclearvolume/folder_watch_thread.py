@@ -47,9 +47,11 @@ class WatchThread(Thread):
 
     def get(self):
         fName = self.fileQueue.get()
-        print "getting datat from ", fName
+        print "getting data from ", fName
         data, meta =  ImageFileReader.load_file(fName)
-        return data
+        print "shape: ", data.shape
+        return data, meta
+            
             
         
 

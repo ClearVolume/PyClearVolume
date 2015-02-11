@@ -15,7 +15,7 @@ time.sleep(1)
 print "starting to serve data"
 
 N = 128
-data = np.linspace(0,65000,N**3).reshape((N,)*3).astype(np.uint16)
+data = np.linspace(0,255,N**3).reshape((N,)*3).astype(np.uint8)
 
 t = 0
 while True:

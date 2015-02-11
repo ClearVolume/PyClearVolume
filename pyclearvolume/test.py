@@ -1,50 +1,25 @@
-import socket
+from pyclearvolume import DataServer, ImageFileReader
+
 import numpy as np
-import sys
 import time
-import signal
-
-
-from _serialize import _serialize_data
-
-
 
 if __name__ == "__main__":
 
+    data, meta = ImageFileReader.load_file("/Users/mweigert/Tmp/CVTmp/retina.czi")
+    data = data[0,0,0,:,:,:,0]
 
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_address = ("localhost", 9141)
-    print 'starting up on %s port %s' % server_address
+    # data = np.linspace(0,255,64**3).reshape((64,)*3)
+    
+    d = DataServer(maxVolumeNumber=20)
 
-    try:
-        sock.bind(server_address)
-    except Exception as e:
-        print e
+    d.start()
 
-    sock.listen(10)
+    d.sendData(data.astype(np.uint8))
 
-    # Ns = [3,4,5]
+    d.serveUntilEmpty()
 
-    # d = (np.linspace(0,256,np.prod(Ns))).reshape(Ns).astype(np.uint8)
+    
+    # d.stop()
 
 
-    # dStr = package_data(d)
-
-    def exit_handler(signum, frame):
-        print "closing"
-        sock.close()
-
-    signal.signal(signal.SIGINT,exit_handler)
-
-    conn, addr = sock.accept()
-    print 'Connected with ' + addr[0] + ':' + str(addr[1])
-    # while True:
-    #     print "sending"
-
-    #     d = (np.linspace(0,np.random.randint(100,256),np.prod(Ns))).reshape(Ns).astype(np.uint8)
-    #     dStr = package_data(d)
-
-    #     conn.send(dStr)
-    #     time.sleep(1)
-
-    sock.close()
+    # time.sleep(1.)

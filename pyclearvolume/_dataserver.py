@@ -8,10 +8,10 @@ email: mweigert@mpi-cbg.de
 import socket
 import Queue
 import threading
+import time
 
 
 from _serialize import _serialize_data
-
 
 
 ######   logging stuff
@@ -42,6 +42,7 @@ class DataServer:
 
     d.sendData(data.astype(uint16))
 
+    d.stop()
 
     """
 
@@ -56,11 +57,15 @@ class DataServer:
                  address = _DEFAULT_ADDRESS,
                  port = _DEFAULT_PORT,
                  maxVolumeNumber = 20,
-                 dropVolumeOnFull = True):
+                 dropVolumeOnFull = True,
+                 blocking = True):
         print "creating a server at address '%s' and port '%s'"%(address,port)
         
         self.sock = socket.socket()
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.sock.setblocking(True)
+        
+        self.sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
         self.dataQueue = Queue.Queue(maxsize = max(1,maxVolumeNumber))
         self.dataThread = _DataServerThread(self.sock, self.dataQueue)
         self.dropVolumeOnFull = dropVolumeOnFull
@@ -99,7 +104,7 @@ class DataServer:
 
         """
 
-        logger.debug("got data of shape %s"%str(data.shape))
+        logger.debug("put data of shape %s in queue"%str(data.shape))
         logger.debug("meta: %s"%kwargs)
 
         if self.dataQueue.full():
@@ -129,9 +134,15 @@ class DataServer:
         logger.debug("starting server")
         self.dataThread.start()
 
-    def stop(self):
-        self.dataThread.stop()
+    def stop(self,blocking = False):
+        self.dataThread.stop(blocking = blocking)
         self.sock.close()
+
+    def serveUntilEmpty(self):
+        while not self.dataThread.isempty:
+            logger.debug("waiting until empty")
+            time.sleep(.5)
+            
 
     def __del__(self):
         self.stop()
@@ -145,41 +156,50 @@ class _DataServerThread(threading.Thread):
         threading.Thread.__init__ (self)
         self.sock = sock
         self.dataQueue  = dataQueue
-        self.daemon = True
-        self.isConnected = False
+        self.setDaemon(True)
+        self.isempty = False
+        self.isconnected = False
         self.clientAddress = None
-
 
 
     def run(self):
         self.isRunning = True
         while self.isRunning:
-            logger.debug("waiting for connection...")
+            logger.debug("[thread] waiting for connection...")
             self.isconnected = False
             conn, addr = self.sock.accept()
+            self.isconnected = True
             self.clientAddress = addr[0]
             logger.debug("...connected!")
-            self.isconnected = True
-
-            logger.debug("now serving the data...")
+           
+            logger.debug("[thread] now serving the data...")
             while True:
                 try:
+                    self.isempty = False
                     data, meta = self.dataQueue.get(block = True, timeout = self._TIMEOUT)
+                    logger.debug("[thread] got data in thread...")
                     self.send_data(conn,data, meta)
                 except Queue.Empty:
+                    logger.debug("[thread] Queue empty")
+                    self.isempty = True
                     # logger.debug("no data :(")
-                    pass
+                    # if not self.isRunning:
+                    #     break
                 except socket.error:
-                    logger.debug("socket broken")
+                    logger.debug("[thread] socket broken")
                     break
-
-    def stop(self):
-        # logger.debug("stopping thread")
+                time.sleep(.1)
+        logger.debug("[thread] closing socket")
+        self.sock.close()
+        
+    def stop(self, blocking):
+        logger.debug("[thread] stopping")
         self.isRunning = False
 
     def send_data(self,conn,data, meta = {}):
         # print "SEEEEND ", data.shape, meta
-        conn.send(_serialize_data(data, meta))
+        logger.debug("[thread] send_data()")
+        conn.sendall(_serialize_data(data, meta))
         #_serialize_data
 
 
