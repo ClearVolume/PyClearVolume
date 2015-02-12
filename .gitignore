@@ -1,2 +1,4 @@
 *.pyc
 pyclearvolume/tests
+build/windows/build/
+build/windows/dist

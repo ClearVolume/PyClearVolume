@@ -38,7 +38,7 @@ class WatchThread(Thread):
     def run(self):
         while True:
             allfiles = dict([(k,v) for k,v in self.folderReader.list_files() if not k  in self.processed])
-
+            print allfiles
             self.updatelist.update(allfiles)
             
             newfiles = self.updatelist.filter_names()
@@ -70,14 +70,14 @@ class UpdateCountList(object):
         self.properties = SortedDict()
         self.counts = Counter()
 
-    def add(self,name,property):
+    def add(self,name,prop):
         if self.properties.has_key(name):
-            if property == self.properties[name]:
+            if prop == self.properties[name]:
                 self.counts[name] += 1
             else:
-                self.properties[name] = properties
+                self.properties[name] = prop
         else:
-            self.properties[name] = property
+            self.properties[name] = prop
             self.counts[name] = 0
 
     def is_empty():
@@ -94,6 +94,7 @@ class UpdateCountList(object):
             self.pop(n)
 
         for n,p in namedProperties.iteritems():
+
             self.add(n,p)
             
     def __repr__(self):
