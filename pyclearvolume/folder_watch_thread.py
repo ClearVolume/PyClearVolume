@@ -7,7 +7,7 @@ returns the data
 
 
 import os
-from Queue import Queue
+import Queue
 from threading import Thread
 
 from sortedcontainers import SortedList, SortedDict
@@ -24,11 +24,12 @@ class WatchThread(Thread):
     """
     """
     TIME_STEP = .1
-    def __init__(self,dirName, wildcard="*", deltaTime = 1., func = os.path.getmtime):
+    def __init__(self,dirName, wildcard="*", deltaTime = 1., func = os.path.getsize):
         maxCount = int(np.ceil(deltaTime/self.TIME_STEP))
+        print "setting up watchthread with maxCount %s"%maxCount
         super(WatchThread,self).__init__()
         self.folderReader = ImageFolderReader(dirName,wildcard, func)
-        self.goodFiles = Queue()
+        self.goodFiles = Queue.Queue()
         self.updatelist = UpdateCountList(maxCount)
         self.processed = set()
         self.setDaemon(True)
@@ -42,8 +43,10 @@ class WatchThread(Thread):
             
             newfiles = self.updatelist.filter_names()
             if newfiles:
-                self.goodFiles.put(newfiles[0])
-                self.processed.add(newfiles[0])
+                fName = newfiles[0]
+                print "newfile: %s   %s"%(fName, self.updatelist.properties[fName])
+                self.goodFiles.put(fName)
+                self.processed.add(fName)
     
             time.sleep(self.TIME_STEP)
 
@@ -114,16 +117,22 @@ def test_updatelist():
     u.pop(alist.keys()[0])    
     u.update(alist)
     print u.counts
-    
+
+
+
 if __name__ == "__main__":
 
     # test_updatelist()
     
-    a = WatchThread("tests/")
+    a = WatchThread("tests_watch/", deltaTime = 1.)
     a.start()
 
     while True:
-        print "%s files to be processed"%a.goodFiles.qsize()
-        time.sleep(2.)
+        try:
+            fName = a.goodFiles.get(timeout = 1.)
+            print "a new file arrived! ", fName
+        except Queue.Empty:
+            pass
+        time.sleep(.1)
 
     
