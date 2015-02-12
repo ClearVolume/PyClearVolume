@@ -12,11 +12,12 @@ class SlowlyFileWriteThread(threading.Thread):
     """
     simulates a slowly write of an image file 
     """
-    def __init__(self,fName, timestep = .1, chunksize = 64):
+    def __init__(self,fName, time_to_write = 10., chunksize = 64):
         super(SlowlyFileWriteThread,self).__init__()
         self.fName = fName
-        self.timestep = timestep
+        self.timestep = 0.1
         self.chunksize = chunksize
+        self.nsteps = int(np.ceil(time_to_write/self.timestep))
         #erase file
         with open(self.fName,"w") as f:
             pass
@@ -25,7 +26,7 @@ class SlowlyFileWriteThread(threading.Thread):
     
 
     def run(self):
-        while True:
+        for i in range(self.nsteps):
             with open(self.fName,"a") as f:
                 f.write("1"*self.chunksize)                
             time.sleep(self.timestep)
@@ -44,7 +45,7 @@ if __name__ == "__main__":
     writeSimulator.start()
 
     
-    a = WatchThread(dirName, deltaTime = 1.)
+    a = WatchThread(dirName, deltaTime = .1)
     a.start()
 
     while True:

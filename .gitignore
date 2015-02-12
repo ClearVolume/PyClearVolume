@@ -1,4 +1,3 @@
 *.pyc
 pyclearvolume/tests
-build/windows/build/
-build/windows/dist
+pyclearvolume/tests_watch

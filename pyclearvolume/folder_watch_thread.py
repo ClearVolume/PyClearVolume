@@ -38,7 +38,6 @@ class WatchThread(Thread):
     def run(self):
         while True:
             allfiles = dict([(k,v) for k,v in self.folderReader.list_files() if not k  in self.processed])
-            print allfiles
             self.updatelist.update(allfiles)
             
             newfiles = self.updatelist.filter_names()
