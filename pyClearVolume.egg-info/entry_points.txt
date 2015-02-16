@@ -1,0 +1,4 @@
+[console_scripts]
+pycleartest = pyclearvolume.test:main
+pyclearvolume_serve = pyclearvolume.pyclearvolume_serve:main
+

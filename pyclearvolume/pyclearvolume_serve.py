@@ -110,8 +110,7 @@ def _iter_file_folder_list(fNames):
                     
                 
 
-if __name__ == "__main__":
-
+def main():
     parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter,
         description="""
         serves 3d image files to the clearvolume client
@@ -181,3 +180,5 @@ if __name__ == "__main__":
         _send_files(fNames,args.address,args.port,**kwargs)
 
     
+if __name__ == "__main__":
+    main()
