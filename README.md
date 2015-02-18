@@ -12,18 +12,19 @@ A working installation of [ClearVolume](https://bitbucket.org/clearvolume/clearv
 
 Either via pip
 
-> pip install git+http://bitbucket.org/clearvolume/pyclearvolume
+> pip install git+https://github.com/ClearVolume/pyclearvolume
 
 or classically
 
-> git clone http://bitbucket.org/clearvolume/pyclearvolume
+> git clone https://github.com/ClearVolume/pyclearvolume
 
 > cd pyclearvolume
 
 > python setup.py install
 
 
-to test if everything worked just run from the command line   
+to test if everything worked just run from the command line
+
 
 > python -m pyclearvolume
 
