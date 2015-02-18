@@ -43,14 +43,15 @@ To create a instance of the data server just do
 
 then start the server
 
-	
-	d.start()
+```python	
+d.start()
+```
 
 and send some data
 
 	```python
 	d.sendData(data, time = 0, channel = 1, color ="1.0 0.4 0.2 1.0") 
-
+	```
 
 
 ###Example 
