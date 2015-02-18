@@ -35,7 +35,6 @@ which will serve some dummy data to the default port (9140 on localhost) ClearVo
 
 To create a instance of the data server just do 
 
-    :::python 
 	d = pyclearvolume.DataServer(
 	    address = "localhost",
 		port = 9140,
@@ -44,12 +43,12 @@ To create a instance of the data server just do
 
 then start the server
 
-	:::python
+	
 	d.start()
 
 and send some data
 
-	:::python
+	```python
 	d.sendData(data, time = 0, channel = 1, color ="1.0 0.4 0.2 1.0") 
 
 
