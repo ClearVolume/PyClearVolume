@@ -41,7 +41,7 @@ Pyclearvolume comes with an executable script *pyclearvolume_serve* that provide
 See the options for all available parameters:
 
 ```
-pyclearvolume_serve.py [-h] [-a ADDRESS] [-p PORT] [-w] [-t DTIME]
+pyclearvolume_serve [-h] [-a ADDRESS] [-p PORT] [-w] [-t DTIME]
                               [-u UNITS UNITS UNITS] [-c COLOR COLOR COLOR]
                               files [files ...]
 
