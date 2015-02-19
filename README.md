@@ -1,4 +1,6 @@
-# pyclearvolume
+
+![GitHub Logo](/images/logo64.png)
+# pyclearvolume      
 
 Python bindings to the [ClearVolume project](https://bitbucket.org/clearvolume/clearvolume).
 
