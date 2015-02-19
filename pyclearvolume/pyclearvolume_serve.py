@@ -109,22 +109,29 @@ def _iter_file_folder_list(fNames):
             
                     
                 
+class MyFormatter(argparse.ArgumentDefaultsHelpFormatter):
 
-def main():
-    parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter,
-        description="""
-        serves 3d image files to the clearvolume client
+    def _fill_text(self, text, width, indent):
         
-        example usage:
+        return ''.join([indent + line for line in text.splitlines(True)])
+
+    
+def main():
+    parser = argparse.ArgumentParser(formatter_class=MyFormatter,
+        description="""
+serves 3d image files or folder to a clearvolume client
+    
+pyclearvolume_serve  myfile.tif\n
+pyclearvolume_serve -u 1. 1. 2. -a remote.domain.com -p 9140 myfile.tif 
 
         """)
 
     parser.add_argument("-a","--address",dest="address",
-                        help = """address to bind to (default: localhost)  """,
+                        help = """address to bind to""",
                         type=str,default = "", required = False)
 
     parser.add_argument("-p","--port",dest="port",
-                        help = """port to bind to (default: 9140)  """,
+                        help = """port to bind to""",
                         type=int,default = 9140, required = False)
 
     parser.add_argument("-w","--watch",dest="watch",
@@ -141,10 +148,10 @@ def main():
                         type=float,nargs= 3 ,default = [1.,1.,1.], required=False)
     
     parser.add_argument("-c","--color",dest="color",
-                        help = """color in 0..1""",
+                        help = """color rgb in 0..1""",
                         type=float,nargs= 3 ,default = [1.,1.,1.], required=False)
   
-    parser.add_argument("files", help="image files or folder to send/watch", nargs="+") 
+    parser.add_argument("files", help="image files or folder to send/watch (currently supported: %s"%(str(ImageFileReader._supported.keys())), nargs="+") 
 
 
 
