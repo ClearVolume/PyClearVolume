@@ -1,6 +1,8 @@
 # pyclearvolume
 
-python bindings to the [ClearVolume project](https://bitbucket.org/clearvolume/clearvolume) that enables serving numpy data from within python to the renderer.  
+Python bindings to the [ClearVolume project](https://bitbucket.org/clearvolume/clearvolume).
+
+With it you can either serve numpy data directly from within python to any running ClearVolume client or send/watch a folder via *pyclearvolume_serve* and serev its content to the client (making it useful e.g. for remote scopes)  
 
 ## Prerequisites
 
@@ -33,31 +35,72 @@ which will serve some dummy data to the default port (9140 on localhost) ClearVo
 
 ## Usage
 
+### standalone utility
+
+Pyclearvolume comes with an executable script *pyclearvolume_serve* that provides a fast way to serve single files (tif or czi) or folder to the client renderer. It further allows to watch a folder for changes and stream any newly arriving data.
+See the options for all available parameters:
+
+```
+pyclearvolume_serve [-h] [-a ADDRESS] [-p PORT] [-w] [-t DTIME]
+                              [-u UNITS UNITS UNITS] [-c COLOR COLOR COLOR]
+                              files [files ...]
+
+serves 3d image files or folder to a clearvolume client
+    
+pyclearvolume_serve  myfile.tif
+
+pyclearvolume_serve -u 1. 1. 2. -a remote.domain.com -p 9140 myfile.tif 
+
+        
+
+positional arguments:
+  files                 image files or folder to send/watch (currently
+                        supported: ['.tif', '.czi', '.tiff']
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -a ADDRESS, --address ADDRESS
+                        address to bind to (default: )
+  -p PORT, --port PORT  port to bind to (default: 9140)
+  -w, --watch           watch folder (default: False)
+  -t DTIME, --time DTIME
+                        time in secs in watch mode to wait for file not having
+                        changed (default: 1.0)
+  -u UNITS UNITS UNITS, --units UNITS UNITS UNITS
+                        relative units of voxels e.g. -u 1. 1. 2. (default:
+                        [1.0, 1.0, 1.0])
+  -c COLOR COLOR COLOR, --color COLOR COLOR COLOR
+                        color rgb in 0..1 (default: [1.0, 1.0, 1.0])
+```
+
+### from within python 
+
 To create a instance of the data server just do 
-
-    :::python 
-	d = pyclearvolume.DataServer(
-	    address = "localhost",
-		port = 9140,
-		maxVolumeNumber = 20,
-        dropVolumeOnFull = True)
-
+```python
+d = pyclearvolume.DataServer(
+	address = "localhost",
+	port = 9140,
+	maxVolumeNumber = 20,
+	dropVolumeOnFull = True)
+ ```
+  
+  
 then start the server
 
-	:::python
-	d.start()
+  ```python	
+d.start()
+  ```
 
 and send some data
 
-	:::python
-	d.sendData(data, time = 0, channel = 1, color ="1.0 0.4 0.2 1.0") 
-
+  ```python
+d.sendData(data, time = 0, channel = 1, color ="1.0 0.4 0.2 1.0") 
+  ```
 
 
 ###Example 
 
-
-    ::python
+  ```python
 	import numpy as np
 	import time
 
@@ -90,3 +133,4 @@ and send some data
     	  d.sendData(data,**args)
     	  time.sleep(2)
     	  t += 1
+  ```
