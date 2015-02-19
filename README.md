@@ -135,3 +135,7 @@ d.sendData(data, time = 0, channel = 1, color ="1.0 0.4 0.2 1.0")
     	  time.sleep(2)
     	  t += 1
   ```
+  
+  ## Acknowledgements
+  
+  For opening tif and czi files pyclearvolume uses the excellent modules "tifffile" and "czifile" from [Christoph Gohlke](http://www.lfd.uci.edu/~gohlke/).
