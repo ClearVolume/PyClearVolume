@@ -53,6 +53,7 @@ class DataServer:
 
     FullQueueError = Exception("Data queue is full and policy was not set to drop!")
 
+
     def __init__(self,
                  address = _DEFAULT_ADDRESS,
                  port = _DEFAULT_PORT,
@@ -94,7 +95,7 @@ class DataServer:
           "color": "1. 1. 1. 1.",
           "viewmatrix": "1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.",
           "dim": 3,
-          "type": "Byte",
+          "type": "Unsigned Byte",
           "bytespervoxel":1,
           "elementsize": 1,
           "voxelwidth": 1,

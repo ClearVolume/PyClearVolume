@@ -16,7 +16,7 @@ DEFAULT_METADATA = {
     "color": "1. 1. 1. 1.",
     "viewmatrix": "1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.",
 	"dim": 3,
-	"type": "Byte",
+	"type": "UnsignedByte",
 	"bytespervoxel":1,
 	"elementsize": 1,
 	"voxelwidth": 1,
@@ -25,27 +25,43 @@ DEFAULT_METADATA = {
 	"realunit":1
     }
 
+_SUPPORTED_TYPES = {np.uint8 : "UnsignedByte",
+                    np.uint16: "UnsignedShort"}
+    
 
 
 def _serialize_data(data, meta = DEFAULT_METADATA ):
     """returns serialized version of data for clearvolume data viewer"""
 
+    if not isinstance(data, np.ndarray):
+        raise TypeError("data should be a numpy array (but is %s)"%type(data))
+
+    
+    if not data.dtype.type in _SUPPORTED_TYPES:
+        raise ValueError("data type should be in (%s) (but is %s)"%(_SUPPORTED_TYPES.keys(),data.dtype))
+            
     LenInt64 = len(np.int64(1).tostring())
 
     Ns = data.shape
 
+    
     metaData = DEFAULT_METADATA.copy()
-    #prepare header....
-    for attrName,N in zip(["width","height","depth"],Ns[::-1]):
-        metaData[attrName] = meta.get(attrName,N)
 
+    #prepare header....
+
+    metaData["type"] = _SUPPORTED_TYPES[data.dtype.type]
+    
+    for attrName,N in zip(["width","height","depth"],Ns[::-1]): 
+        metaData[attrName] = meta.get(attrName,N)
+        
     for key, val in meta.iteritems():
         if not metaData.has_key(key):
             raise KeyError(" '%s' (= %s) as is an unknown property!"%(key, val))
         else:
             metaData[key] = val
 
-
+    print metaData
+    
     keyValPairs = [str(key)+":"+str(val) for key, val in metaData.iteritems()]
     headerStr = ",".join(keyValPairs)
     headerStr = "["+headerStr+"]"
