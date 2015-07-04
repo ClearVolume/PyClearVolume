@@ -13,7 +13,6 @@ DEFAULT_METADATA = {
     "time": 0,
 	"channel": 0,
     "channelname": "python source",
-    "color": "1. 1. 1. 1.",
     "viewmatrix": "1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.",
 	"dim": 3,
 	"type": "UnsignedByte",
