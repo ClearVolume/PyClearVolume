@@ -3,7 +3,7 @@
 
 Python bindings to the [ClearVolume project](https://bitbucket.org/clearvolume/clearvolume).
 
-With it you can either serve numpy data directly from within python to any running ClearVolume client or send/watch a folder via *pyclearvolume_serve* and serev its content to the client (making it useful e.g. for remote scopes)  
+With it you can either serve numpy data directly from within python to any running ClearVolume client or send/watch a folder via *pyclearvolume_serve* and serve its content to the client (making it useful e.g. for remote scopes)  
 
 ## Prerequisites
 
