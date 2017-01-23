@@ -1,4 +1,5 @@
 from __future__ import print_function, division
+from __future__ import absolute_import
 import numpy as np
 import time
 
@@ -44,4 +45,4 @@ def test_server(dtype = np.uint8, N = 128):
 
 
 if __name__ == '__main__':
-    test_server(dtype = np.int32)
+    test_server(dtype = np.uint16)

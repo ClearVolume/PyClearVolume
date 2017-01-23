@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import socket
 
 
@@ -8,4 +10,4 @@ if __name__ == '__main__':
 
     while True:
         s = sock.recv(1024)
-        print s
+        print(s)

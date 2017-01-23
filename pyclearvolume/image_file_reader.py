@@ -23,8 +23,8 @@ import glob
 import warnings
 warnings.filterwarnings("ignore")
 
-import tifffile
-from pyclearvolume import czifile
+from pyclearvolume.lib import tifffile
+from pyclearvolume.lib import czifile
 
 def _load_tif_file(fName):
     with tifffile.TiffFile(fName) as imgFile:

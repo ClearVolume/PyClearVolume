@@ -3,7 +3,6 @@ from __future__ import absolute_import
 from __future__ import print_function
 import numpy as np
 import time
-
 import pyclearvolume
 
 print("creating the server")
@@ -17,7 +16,7 @@ time.sleep(1)
 print("starting to serve data")
 
 N = 128
-data = np.linspace(0,255,N**3).reshape((N,)*3).astype(np.uint8)
+data = np.linspace(0,255,N**3).reshape((N,)*3).astype(np.uint16)
 
 t = 0
 while True:

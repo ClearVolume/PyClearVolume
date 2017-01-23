@@ -1,10 +1,13 @@
+from __future__ import absolute_import
+from __future__ import print_function
 import os
 import time
-import Queue
+import six.moves.queue
 import threading
 import numpy as np
 
-from folder_watch_thread import WatchThread
+from pyclearvolume.folder_watch_thread import WatchThread
+from six.moves import range
 
 
 
@@ -25,7 +28,7 @@ class SlowlyFileWriteThread(threading.Thread):
         """write constantly files to dir"""
         while True:
             fName = os.path.join(self.dirName,"RANDOM_%d.tif"%(time.time()))
-            print "writing to %s\n"%fName
+            print("writing to %s\n"%fName)
             #erase file
             with open(fName,"w") as f:
                 pass
@@ -39,7 +42,7 @@ class SlowlyFileWriteThread(threading.Thread):
 
 if __name__ == "__main__":
 
-    dirName =  "tests_watch/"
+    dirName =  "data/random/"
 
 
     
@@ -54,8 +57,8 @@ if __name__ == "__main__":
     while True:
         try:
             fName = a.goodFiles.get(timeout = 1.)
-            print "a new file arrived! ", fName
-        except Queue.Empty:
+            print("a new file arrived! ", fName)
+        except six.moves.queue.Empty:
             pass
         time.sleep(.1)
 
