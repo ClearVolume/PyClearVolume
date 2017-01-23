@@ -14,8 +14,6 @@ and python-bioformats
 """
 
 
-from __future__ import absolute_import
-from __future__ import print_function
 import os
 import glob 
 
@@ -54,7 +52,7 @@ class ImageFileReader(object):
     @classmethod
     def is_supported(cls,fName):
         basename, ext = os.path.splitext(fName)
-        return ext in cls._supported
+        return cls._supported.has_key(ext)
 
     @classmethod
     def load_func_for(cls,fName):
@@ -65,7 +63,7 @@ class ImageFileReader(object):
     def load_file(cls,fName):
         if not cls.is_supported(fName):
             raise ValueError("Image format of  %s not in supported formats (%s)!"
-                             %(fName,list(cls._supported.keys())))
+                             %(fName,cls._supported.keys()))
 
         return cls.load_func_for(fName)(fName)
 
@@ -111,6 +109,6 @@ if __name__ == "__main__":
     
     a = ImageFolderReader("/Users/mweigert/Tmp/CVTmp/")
 
-    print(a.list_files())
+    print a.list_files()
     for data, meta in a:
-        print(data.shape,meta)
+        print data.shape,meta

@@ -1,7 +1,5 @@
 #!/usr/local/bin/python
 
-from __future__ import absolute_import
-from __future__ import print_function
 import numpy as np
 import time
 import argparse 
@@ -12,7 +10,6 @@ from pyclearvolume.folder_watch_thread import WatchThread
 from pyclearvolume.image_file_reader import ImageFileReader
 
 import pyclearvolume
-import six
 
 
 def _extract_3d(data):
@@ -50,20 +47,20 @@ def _watch_folder(dirName, addr, port, dtime,**kwargs):
     t = 0
     while True:
         if not watchThread.empty():
-            print("connected to %s %s"%(d.client_address()))
+            print "connected to %s %s"%(d.client_address())
             try:
                 data, meta = watchThread.get()
-                print("getting:  ", data.shape)
+                print "getting:  ", data.shape
                 data = _prepare_data(data)
                 args = {}
                 args["index"] = t
                 args.update(kwargs)
-                print("sending data of shape %s"%(data.shape,))
+                print "sending data of shape %s"%(data.shape,)
                 d.sendData(data,**args)
                 d.serveUntilEmpty()
                 t += 1
             except  Exception as e:
-                print(e)
+                print e
 
         time.sleep(1.)
 
@@ -78,9 +75,9 @@ def _send_files(fNames, addr, port, **kwargs):
     d.start()
 
     t = 0
-    print(files)
+    print files
     for fName in files:
-        print(fName)
+        print fName
         try:
             data, meta = ImageFileReader.load_file(fName)
             data = _prepare_data(data)
@@ -89,13 +86,13 @@ def _send_files(fNames, addr, port, **kwargs):
             args["index"] = t
             args.update(kwargs)
 
-            print("sending data of shape %s"%(data.shape,))
+            print "sending data of shape %s"%(data.shape,)
             d.sendData(data,**args)
             d.serveUntilEmpty()
             time.sleep(.1)
             t += 1
         except Exception as e:
-            print(e)
+            print e
        
     d.stop()
 
@@ -154,7 +151,7 @@ pyclearvolume_serve -u 1. 1. 2. -a remote.domain.com -p 9140 myfile.tif
                         help = """color rgb in 0..1""",
                         type=float,nargs= 3 ,default = [1.,1.,1.], required=False)
   
-    parser.add_argument("files", help="image files or folder to send/watch (currently supported: %s"%(str(list(ImageFileReader._supported.keys()))), nargs="+") 
+    parser.add_argument("files", help="image files or folder to send/watch (currently supported: %s"%(str(ImageFileReader._supported.keys())), nargs="+") 
 
 
 
@@ -166,8 +163,8 @@ pyclearvolume_serve -u 1. 1. 2. -a remote.domain.com -p 9140 myfile.tif
 
     args = parser.parse_args()
 
-    for k,v in six.iteritems(vars(args)):
-        print(k,v)
+    for k,v in vars(args).iteritems():
+        print k,v
 
     kwargs = dict()
 
@@ -186,7 +183,7 @@ pyclearvolume_serve -u 1. 1. 2. -a remote.domain.com -p 9140 myfile.tif
 
     else:
         fNames = [f for f in _iter_file_folder_list(args.files)]
-        print(fNames)
+        print fNames
         _send_files(fNames,args.address,args.port,**kwargs)
 
     

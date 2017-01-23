@@ -5,10 +5,8 @@ author: Martin Weigert
 email: mweigert@mpi-cbg.de
 """
 
-from __future__ import absolute_import
-from __future__ import print_function
 import socket
-import six.moves.queue
+import Queue
 import threading
 import time
 
@@ -62,14 +60,14 @@ class DataServer:
                  maxVolumeNumber = 20,
                  dropVolumeOnFull = True,
                  blocking = True):
-        print("creating a server at address '%s' and port '%s'"%(address,port))
+        print "creating a server at address '%s' and port '%s'"%(address,port)
         
         self.sock = socket.socket()
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.setblocking(True)
         
         self.sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-        self.dataQueue = six.moves.queue.Queue(maxsize = max(1,maxVolumeNumber))
+        self.dataQueue = Queue.Queue(maxsize = max(1,maxVolumeNumber))
         self.dataThread = _DataServerThread(self.sock, self.dataQueue)
         self.dropVolumeOnFull = dropVolumeOnFull
         self._bind(address,port)
@@ -79,7 +77,7 @@ class DataServer:
         try:
             self.sock.bind((address,port))
         except Exception as e:
-            print(e)
+            print e
 
         self.sock.listen(10)
 
@@ -129,7 +127,7 @@ class DataServer:
                 clientName = socket.gethostbyaddr(clientIP)[0]
                 return clientIP, clientName
             except Exception as e:
-                print(e)
+                print e
         return None, None
 
 
@@ -183,7 +181,7 @@ class _DataServerThread(threading.Thread):
                     logger.debug("[thread] got data in thread...")
                     self.send_data(conn,data, meta)
                     self.dataQueue.task_done()
-                except six.moves.queue.Empty:
+                except Queue.Empty:
                     logger.debug("[thread] Queue empty")
                     self.isempty = True
                     # logger.debug("no data :(")
@@ -240,8 +238,8 @@ def test_serve_forever():
         args["voxeldepth"] = np.random.uniform(.2,1.6)
         args["time"] = t
 
-        print("sending...")
-        print(args)
+        print "sending..."
+        print args
         d.sendData(data,**args)
         # d.sendData(data)
         time.sleep(2)

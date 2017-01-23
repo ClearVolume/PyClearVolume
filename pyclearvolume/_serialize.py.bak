@@ -5,11 +5,7 @@ author: Martin Weigert
 email: mweigert@mpi-cbg.de
 """
 
-from __future__ import absolute_import
-from __future__ import print_function
 import numpy as np
-import six
-from six.moves import zip
 
 
 DEFAULT_METADATA = {
@@ -41,7 +37,7 @@ def _serialize_data(data, meta = DEFAULT_METADATA ):
 
     
     if not data.dtype.type in _SUPPORTED_TYPES:
-        raise ValueError("data type should be in (%s) (but is %s)"%(list(_SUPPORTED_TYPES.keys()),data.dtype))
+        raise ValueError("data type should be in (%s) (but is %s)"%(_SUPPORTED_TYPES.keys(),data.dtype))
             
     LenInt64 = len(np.int64(1).tostring())
 
@@ -57,15 +53,15 @@ def _serialize_data(data, meta = DEFAULT_METADATA ):
     for attrName,N in zip(["width","height","depth"],Ns[::-1]): 
         metaData[attrName] = meta.get(attrName,N)
         
-    for key, val in six.iteritems(meta):
-        if key not in metaData:
+    for key, val in meta.iteritems():
+        if not metaData.has_key(key):
             raise KeyError(" '%s' (= %s) as is an unknown property!"%(key, val))
         else:
             metaData[key] = val
 
-    print(metaData)
+    print metaData
     
-    keyValPairs = [str(key)+":"+str(val) for key, val in six.iteritems(metaData)]
+    keyValPairs = [str(key)+":"+str(val) for key, val in metaData.iteritems()]
     headerStr = ",".join(keyValPairs)
     headerStr = "["+headerStr+"]"
     

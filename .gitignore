@@ -1,4 +1,3 @@
 *.pyc
-pyclearvolume/tests
-pyclearvolume/tests_watch
 pyclearvolume.egg-info
+tests/data

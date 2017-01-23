@@ -10,7 +10,10 @@ setup(name='pyclearvolume',
       author_email='mweigert@mpi-cbg.de',
       license='MIT',
       packages=['pyclearvolume'],
-      install_requires=["numpy","scipy","sortedcontainers"],
+      install_requires=["numpy",
+                        "scipy",
+                        "sortedcontainers",
+                        "tifffile"],
       entry_points={
           'console_scripts': [
               'pycleartest=pyclearvolume.test:main',
