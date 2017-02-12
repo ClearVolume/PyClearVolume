@@ -1,13 +1,13 @@
 ![GitHub Logo](/images/logo64.png)
 # pyclearvolume      
 
-Python bindings to the [ClearVolume project](https://bitbucket.org/clearvolume/clearvolume).
+Python bindings to the [ClearVolume project](http://clearvolume.github.io/).
 
 With it you can either serve numpy data directly from within python to any running ClearVolume client or send/watch a folder via *pyclearvolume_serve* and serve its content to the client (making it useful e.g. for remote scopes)  
 
 ## Prerequisites
 
-A working installation of [ClearVolume](https://bitbucket.org/clearvolume/clearvolume).
+A working installation of [ClearVolume](http://clearvolume.github.io/).
 
 
 ## Installing
@@ -24,7 +24,6 @@ or classically
 > cd pyclearvolume
 
 > python setup.py install
-
 
 to test if everything worked just run from the command line
 
